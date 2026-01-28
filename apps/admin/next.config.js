@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@domislink/ui', '@domislink/database', '@domislink/auth', '@domislink/payments', '@domislink/config', '@domislink/i18n', '@domislink/geolocation', '@domislink/ai-characters'],
-  output: 'standalone',
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true
+  }
 }
 
 module.exports = nextConfig
