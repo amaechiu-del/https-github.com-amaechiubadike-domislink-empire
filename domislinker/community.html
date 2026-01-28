@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communities - DomisLinker</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/theme-manager.js"></script>
+    <script src="./js/error-tracker.js"></script>
+    <script src="./js/privacy-compliance.js"></script>
+    <script src="./js/age-verification.js"></script>
+    <script src="./js/accessibility.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><a href="./index.html">🏠 DomisLinker</a></h1>
+            <nav>
+                <a href="./community.html" class="active">Communities</a>
+                <a href="./agent.html">Become Agent</a>
+                <a href="./post-ad.html" class="btn-primary">Post Ad</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h2>Browse Communities</h2>
+            <p>Explore properties by community worldwide</p>
+        </div>
+    </section>
+
+    <section class="filters">
+        <div class="container">
+            <div class="filter-grid">
+                <select id="countryFilter" onchange="filterCommunities()">
+                    <option value="">All Countries</option>
+                </select>
+                <select id="stateFilter" onchange="filterCommunities()">
+                    <option value="">All States</option>
+                </select>
+                <input type="text" id="communitySearch" placeholder="Search communities..." onkeyup="filterCommunities()">
+            </div>
+        </div>
+    </section>
+
+    <section class="communities-list">
+        <div class="container">
+            <div class="communities-grid" id="allCommunities">
+                <!-- Communities loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <script src="./js/app.js"></script>
+    <script>
+        loadAllCommunities();
+    </script>
+</body>
+</html>

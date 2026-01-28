@@ -1,0 +1,118 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Cloudflare Pages
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: |
+          cd domislinker
+          npm install --production
+          
+      - name: Optimize images
+        run: |
+          cd domislinker
+          # Install image optimization tools
+          npm install -g imagemin-cli imagemin-webp imagemin-mozjpeg imagemin-pngquant
+          
+          # Create optimized images directory
+          mkdir -p assets/images/optimized
+          
+          # Optimize images if they exist
+          if [ -d "assets/images" ] && [ "$(ls -A assets/images)" ]; then
+            imagemin assets/images/*.{jpg,jpeg,png} --out-dir=assets/images/optimized --plugin=mozjpeg --plugin=pngquant
+            imagemin assets/images/*.{jpg,jpeg,png} --out-dir=assets/images/optimized --plugin=webp
+          fi
+          
+      - name: Build static assets
+        run: |
+          cd domislinker
+          # Minify CSS
+          npx cleancss-cli css/style.css -o css/style.min.css
+          
+          # Minify JavaScript
+          npx terser js/*.js --compress --mangle --output js/app.min.js
+          
+          # Update HTML to use minified assets
+          sed -i 's/style\.css/style.min.css/g' *.html
+          sed -i 's/app\.js/app.min.js/g' *.html
+          
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: domislinker
+          directory: domislinker
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          
+  deploy-workers:
+    runs-on: ubuntu-latest
+    name: Deploy Cloudflare Workers
+    needs: deploy
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install Wrangler
+        run: npm install -g wrangler
+        
+      - name: Deploy Workers
+        run: |
+          cd domislinker
+          wrangler deploy workers/api.js --name domislinker-api
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          
+  setup-d1-database:
+    runs-on: ubuntu-latest
+    name: Setup D1 Database
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install Wrangler
+        run: npm install -g wrangler
+        
+      - name: Create D1 Database
+        run: |
+          cd domislinker
+          # Create database if it doesn't exist
+          wrangler d1 create domislinker-db || echo "Database may already exist"
+          
+          # Execute schema
+          wrangler d1 execute domislinker-db --file=database-schema.sql
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

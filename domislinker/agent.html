@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become an Agent - DomisLinker</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/theme-manager.js"></script>
+    <script src="./js/error-tracker.js"></script>
+    <script src="./js/privacy-compliance.js"></script>
+    <script src="./js/age-verification.js"></script>
+    <script src="./js/accessibility.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><a href="./index.html">🏠 DomisLinker</a></h1>
+            <nav>
+                <a href="./community.html">Communities</a>
+                <a href="./agent.html" class="active">Become Agent</a>
+                <a href="./post-ad.html" class="btn-primary">Post Ad</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="agent-hero">
+        <div class="container">
+            <h2>Become a DomisLinker Agent</h2>
+            <p>Join our network of real estate professionals worldwide</p>
+        </div>
+    </section>
+
+    <section class="agent-benefits">
+        <div class="container">
+            <h3>Agent Benefits</h3>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h4>💰 Earn Commission</h4>
+                    <p>Get 30% commission on every successful transaction</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>🌍 Global Reach</h4>
+                    <p>Access to worldwide property listings and clients</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>🤖 AI Support</h4>
+                    <p>AI-powered lead generation and client matching</p>
+                </div>
+                <div class="benefit-card">
+                    <h4>📱 Mobile Tools</h4>
+                    <p>Professional dashboard and mobile app access</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="agent-signup">
+        <div class="container">
+            <h3>Agent Registration</h3>
+            <form id="agentForm" class="agent-form">
+                <div class="form-grid">
+                    <input type="text" id="agentName" placeholder="Full Name" required>
+                    <input type="email" id="agentEmail" placeholder="Email Address" required>
+                    <input type="tel" id="agentPhone" placeholder="Phone Number" required>
+                    <input type="text" id="agentLocation" placeholder="Primary Location" required>
+                    <select id="experience" required>
+                        <option value="">Years of Experience</option>
+                        <option value="0-1">0-1 years</option>
+                        <option value="2-5">2-5 years</option>
+                        <option value="6-10">6-10 years</option>
+                        <option value="10+">10+ years</option>
+                    </select>
+                    <input type="text" id="license" placeholder="License Number (if any)">
+                </div>
+                
+                <textarea id="agentBio" placeholder="Tell us about yourself and your real estate experience..." rows="4" required></textarea>
+                
+                <div class="agent-plans">
+                    <h4>Choose Your Plan</h4>
+                    <div class="plans-grid">
+                        <div class="plan-card" onclick="selectAgentPlan('starter')">
+                            <h5>Starter Agent</h5>
+                            <div class="price">$10/month</div>
+                            <ul>
+                                <li>Up to 10 listings</li>
+                                <li>Basic dashboard</li>
+                                <li>Email support</li>
+                            </ul>
+                        </div>
+                        <div class="plan-card" onclick="selectAgentPlan('pro')">
+                            <h5>Pro Agent</h5>
+                            <div class="price">$25/month</div>
+                            <ul>
+                                <li>Unlimited listings</li>
+                                <li>Advanced analytics</li>
+                                <li>Priority support</li>
+                                <li>AI lead generation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" onclick="registerAgent()" class="submit-btn">Register as Agent</button>
+            </form>
+        </div>
+    </section>
+
+    <script src="./js/app.js"></script>
+    <script src="./js/agent.js"></script>
+</body>
+</html>

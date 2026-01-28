@@ -1,0 +1,217 @@
+name: Deploy DomisLink Empire to Cloudflare
+
+on:
+    push:
+        branches:
+            - main
+            - production
+    pull_request:
+        branches:
+            - main
+    workflow_dispatch:
+
+env:
+    NODE_VERSION: "20"
+
+jobs:
+    # Lint and Test
+    quality-check:
+        name: Quality Check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Run linter
+              run: npm run lint
+              continue-on-error: true
+
+            - name: Type check
+              run: npm run type-check
+              continue-on-error: true
+
+    # Build all apps
+    build:
+        name: Build All Apps
+        runs-on: ubuntu-latest
+        needs: quality-check
+        strategy:
+            matrix:
+                app:
+                    [
+                        hub,
+                        realestate,
+                        tickets,
+                        flightmonitor,
+                        teachmaster,
+                        admin,
+                    ]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build ${{ matrix.app }}
+              run: npm run build:${{ matrix.app }}
+              env:
+                  NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+                  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+                  NODE_ENV: production
+
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ${{ matrix.app }}-build
+                  path: apps/${{ matrix.app }}/.next
+                  retention-days: 1
+
+    # Deploy to Cloudflare Pages
+    deploy-cloudflare:
+        name: Deploy to Cloudflare Pages
+        runs-on: ubuntu-latest
+        needs: build
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/production'
+        strategy:
+            matrix:
+                app:
+                    [
+                        hub,
+                        realestate,
+                        tickets,
+                        flightmonitor,
+                        teachmaster,
+                        admin,
+                    ]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Download build artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  name: ${{ matrix.app }}-build
+                  path: apps/${{ matrix.app }}/.next
+
+            - name: Deploy to Cloudflare Pages
+              uses: cloudflare/wrangler-action@v3
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: pages deploy apps/${{ matrix.app }}/.next --project-name=domislink-${{ matrix.app }} --compatibility-date=2024-01-01
+
+    # Build and Push Docker Images
+    docker-build:
+        name: Build Docker Images
+        runs-on: ubuntu-latest
+        needs: build
+        if: github.ref == 'refs/heads/main'
+        strategy:
+            matrix:
+                app:
+                    [
+                        hub,
+                        realestate,
+                        tickets,
+                        flightmonitor,
+                        teachmaster,
+                        admin,
+                    ]
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKER_USERNAME }}
+                  password: ${{ secrets.DOCKER_PASSWORD }}
+
+            - name: Build and push Docker image
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ./Dockerfile.base
+                  push: true
+                  tags: |
+                      ${{ secrets.DOCKER_USERNAME }}/domislink-${{ matrix.app }}:latest
+                      ${{ secrets.DOCKER_USERNAME }}/domislink-${{ matrix.app }}:${{ github.sha }}
+                  build-args: |
+                      APP_NAME=${{ matrix.app }}
+                  cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/domislink-${{ matrix.app }}:buildcache
+                  cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/domislink-${{ matrix.app }}:buildcache,mode=max
+
+    # Notify on completion
+    notify:
+        name: Notify Deployment Status
+        runs-on: ubuntu-latest
+        needs: [deploy-cloudflare, docker-build]
+        if: always()
+        steps:
+            - name: Send Telegram notification
+              if: ${{ secrets.TELEGRAM_BOT_TOKEN != '' }}
+              run: |
+                  STATUS="${{ needs.deploy-cloudflare.result == 'success' && needs.docker-build.result == 'success' && '✅ SUCCESS' || '❌ FAILED' }}"
+                  MESSAGE="DomisLink Empire Deployment $STATUS
+
+                  Branch: ${{ github.ref_name }}
+                  Commit: ${{ github.sha }}
+                  Author: ${{ github.actor }}
+
+                  Cloudflare: ${{ needs.deploy-cloudflare.result }}
+                  Docker: ${{ needs.docker-build.result }}"
+
+                  curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+                    -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+                    -d text="$MESSAGE"
+
+            - name: Send email notification
+              if: ${{ secrets.SENDGRID_API_KEY != '' }}
+              uses: dawidd6/action-send-mail@v3
+              with:
+                  server_address: smtp.sendgrid.net
+                  server_port: 587
+                  username: apikey
+                  password: ${{ secrets.SENDGRID_API_KEY }}
+                  subject: DomisLink Deployment ${{ needs.deploy-cloudflare.result == 'success' && needs.docker-build.result == 'success' && 'Success' || 'Failed' }}
+                  to: ${{ secrets.ADMIN_EMAIL }}
+                  from: noreply@domislink.com
+                  body: |
+                      Deployment Status: ${{ needs.deploy-cloudflare.result == 'success' && needs.docker-build.result == 'success' && 'SUCCESS' || 'FAILED' }}
+
+                      Branch: ${{ github.ref_name }}
+                      Commit: ${{ github.sha }}
+                      Author: ${{ github.actor }}
+
+                      Cloudflare Deployment: ${{ needs.deploy-cloudflare.result }}
+                      Docker Build: ${{ needs.docker-build.result }}
+
+                      View details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

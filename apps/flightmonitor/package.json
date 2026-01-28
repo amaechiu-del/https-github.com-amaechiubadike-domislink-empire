@@ -1,0 +1,32 @@
+{
+  "name": "flightmonitor",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3003",
+    "build": "next build",
+    "start": "next start -p 3003",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "16.1.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@domislink/ui": "workspace:*",
+    "@domislink/database": "workspace:*",
+    "@domislink/auth": "workspace:*",
+    "@domislink/payments": "workspace:*",
+    "@domislink/config": "workspace:*",
+    "@domislink/i18n": "workspace:*",
+    "@domislink/geolocation": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "16.1.1"
+  }
+}

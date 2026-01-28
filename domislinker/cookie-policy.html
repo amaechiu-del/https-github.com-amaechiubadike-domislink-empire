@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Policy - DomisLinker</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/theme-manager.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><a href="./index.html">🏠 DomisLinker</a></h1>
+            <nav>
+                <a href="./community.html">Communities</a>
+                <a href="./agent.html">Become Agent</a>
+                <a href="./post-ad.html" class="btn-primary">Post Ad</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="legal-page">
+        <div class="container">
+            <h1>Cookie Policy</h1>
+            <p class="last-updated">Last updated: January 9, 2025</p>
+
+            <div class="legal-content">
+                <section>
+                    <h2>1. What Are Cookies?</h2>
+                    <p>Cookies are small text files stored on your device when you visit our website. They help us provide you with a better experience by remembering your preferences and analyzing how you use our site.</p>
+                </section>
+
+                <section>
+                    <h2>2. Types of Cookies We Use</h2>
+                    
+                    <div class="cookie-category">
+                        <h3>🔧 Essential Cookies (Always Active)</h3>
+                        <p>These cookies are necessary for the website to function properly and cannot be disabled.</p>
+                        <div class="cookie-details">
+                            <h4>Examples:</h4>
+                            <ul>
+                                <li><strong>domislink-session:</strong> Maintains your login session</li>
+                                <li><strong>domislink-theme:</strong> Remembers your theme preference</li>
+                                <li><strong>domislink-cookie-consent:</strong> Stores your cookie preferences</li>
+                                <li><strong>csrf-token:</strong> Security protection against attacks</li>
+                            </ul>
+                            <p><strong>Duration:</strong> Session or 1 year<br>
+                            <strong>Purpose:</strong> Site functionality and security</p>
+                        </div>
+                    </div>
+
+                    <div class="cookie-category">
+                        <h3>📊 Analytics Cookies (Optional)</h3>
+                        <p>Help us understand how visitors interact with our website to improve user experience.</p>
+                        <div class="cookie-details">
+                            <h4>Examples:</h4>
+                            <ul>
+                                <li><strong>_ga:</strong> Google Analytics visitor identification</li>
+                                <li><strong>_gid:</strong> Google Analytics session identification</li>
+                                <li><strong>domislink-analytics:</strong> Internal usage tracking</li>
+                            </ul>
+                            <p><strong>Duration:</strong> 2 years maximum<br>
+                            <strong>Purpose:</strong> Website analytics and improvement</p>
+                        </div>
+                        <button onclick="toggleAnalytics()" class="toggle-btn" id="analytics-btn">
+                            <span id="analytics-status">Check Status</span>
+                        </button>
+                    </div>
+
+                    <div class="cookie-category">
+                        <h3>🎯 Marketing Cookies (Optional)</h3>
+                        <p>Used to deliver personalized advertisements and measure campaign effectiveness.</p>
+                        <div class="cookie-details">
+                            <h4>Examples:</h4>
+                            <ul>
+                                <li><strong>_fbp:</strong> Facebook Pixel tracking</li>
+                                <li><strong>ads-preferences:</strong> Advertisement personalization</li>
+                                <li><strong>campaign-tracking:</strong> Marketing campaign attribution</li>
+                            </ul>
+                            <p><strong>Duration:</strong> 90 days to 2 years<br>
+                            <strong>Purpose:</strong> Personalized advertising</p>
+                        </div>
+                        <button onclick="toggleMarketing()" class="toggle-btn" id="marketing-btn">
+                            <span id="marketing-status">Check Status</span>
+                        </button>
+                    </div>
+
+                    <div class="cookie-category">
+                        <h3>⚙️ Preference Cookies (Optional)</h3>
+                        <p>Remember your settings and preferences to enhance your experience.</p>
+                        <div class="cookie-details">
+                            <h4>Examples:</h4>
+                            <ul>
+                                <li><strong>language-preference:</strong> Your selected language</li>
+                                <li><strong>currency-preference:</strong> Your preferred currency</li>
+                                <li><strong>search-filters:</strong> Saved search preferences</li>
+                                <li><strong>dashboard-layout:</strong> Customized dashboard settings</li>
+                            </ul>
+                            <p><strong>Duration:</strong> 1 year<br>
+                            <strong>Purpose:</strong> Personalized user experience</p>
+                        </div>
+                        <button onclick="togglePreferences()" class="toggle-btn" id="preferences-btn">
+                            <span id="preferences-status">Check Status</span>
+                        </button>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>3. Third-Party Cookies</h2>
+                    <p>We may use third-party services that set their own cookies:</p>
+                    
+                    <div class="third-party-list">
+                        <div class="third-party-item">
+                            <h4>🔒 Paystack (Payment Processing)</h4>
+                            <p>Secure payment processing and fraud prevention</p>
+                            <p><strong>Privacy Policy:</strong> <a href="https://paystack.com/privacy" target="_blank">paystack.com/privacy</a></p>
+                        </div>
+                        
+                        <div class="third-party-item">
+                            <h4>☁️ Cloudflare (Security & Performance)</h4>
+                            <p>Website security, performance optimization, and DDoS protection</p>
+                            <p><strong>Privacy Policy:</strong> <a href="https://www.cloudflare.com/privacy/" target="_blank">cloudflare.com/privacy</a></p>
+                        </div>
+                        
+                        <div class="third-party-item">
+                            <h4>📈 Google Analytics (Analytics)</h4>
+                            <p>Website usage analytics and performance measurement</p>
+                            <p><strong>Privacy Policy:</strong> <a href="https://policies.google.com/privacy" target="_blank">policies.google.com/privacy</a></p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>4. Managing Your Cookie Preferences</h2>
+                    
+                    <div class="preference-controls">
+                        <h3>🎛️ DomisLinker Cookie Controls</h3>
+                        <p>Use our cookie preference center to manage your settings:</p>
+                        <button onclick="privacyManager.showPreferences()" class="btn-action">
+                            🍪 Manage Cookie Preferences
+                        </button>
+                    </div>
+
+                    <div class="browser-controls">
+                        <h3>🌐 Browser Controls</h3>
+                        <p>You can also control cookies through your browser settings:</p>
+                        
+                        <div class="browser-grid">
+                            <div class="browser-item">
+                                <h4>Chrome</h4>
+                                <p>Settings → Privacy and Security → Cookies</p>
+                            </div>
+                            <div class="browser-item">
+                                <h4>Firefox</h4>
+                                <p>Options → Privacy & Security → Cookies</p>
+                            </div>
+                            <div class="browser-item">
+                                <h4>Safari</h4>
+                                <p>Preferences → Privacy → Cookies</p>
+                            </div>
+                            <div class="browser-item">
+                                <h4>Edge</h4>
+                                <p>Settings → Cookies and Site Permissions</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>5. Impact of Disabling Cookies</h2>
+                    
+                    <div class="impact-grid">
+                        <div class="impact-item">
+                            <h4>🔧 Essential Cookies Disabled</h4>
+                            <ul>
+                                <li>Website may not function properly</li>
+                                <li>Unable to maintain login sessions</li>
+                                <li>Security features may be compromised</li>
+                                <li>Theme preferences won't be saved</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="impact-item">
+                            <h4>📊 Analytics Cookies Disabled</h4>
+                            <ul>
+                                <li>We can't improve user experience</li>
+                                <li>No impact on site functionality</li>
+                                <li>Less personalized recommendations</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="impact-item">
+                            <h4>🎯 Marketing Cookies Disabled</h4>
+                            <ul>
+                                <li>Less relevant advertisements</li>
+                                <li>No impact on site functionality</li>
+                                <li>May see more generic ads</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="impact-item">
+                            <h4>⚙️ Preference Cookies Disabled</h4>
+                            <ul>
+                                <li>Settings reset on each visit</li>
+                                <li>Need to re-enter preferences</li>
+                                <li>Less personalized experience</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>6. Cookie Retention Periods</h2>
+                    <div class="retention-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cookie Type</th>
+                                    <th>Retention Period</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Session Cookies</td>
+                                    <td>Until browser closes</td>
+                                    <td>Temporary functionality</td>
+                                </tr>
+                                <tr>
+                                    <td>Essential Cookies</td>
+                                    <td>1 year maximum</td>
+                                    <td>Core site functions</td>
+                                </tr>
+                                <tr>
+                                    <td>Analytics Cookies</td>
+                                    <td>26 months maximum</td>
+                                    <td>Usage analysis</td>
+                                </tr>
+                                <tr>
+                                    <td>Marketing Cookies</td>
+                                    <td>90 days to 2 years</td>
+                                    <td>Advertisement targeting</td>
+                                </tr>
+                                <tr>
+                                    <td>Preference Cookies</td>
+                                    <td>1 year</td>
+                                    <td>User preferences</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>7. International Data Transfers</h2>
+                    <p>Some cookies may involve data transfers to countries outside your residence:</p>
+                    <ul>
+                        <li><strong>United States:</strong> Google Analytics, Cloudflare services</li>
+                        <li><strong>European Union:</strong> GDPR-compliant processing</li>
+                        <li><strong>Nigeria:</strong> Primary data processing location</li>
+                    </ul>
+                    <p>We ensure appropriate safeguards are in place for all international transfers.</p>
+                </section>
+
+                <section>
+                    <h2>8. Updates to This Policy</h2>
+                    <p>We may update this Cookie Policy periodically. Changes will be communicated through:</p>
+                    <ul>
+                        <li>Updated "Last Modified" date</li>
+                        <li>Email notifications for significant changes</li>
+                        <li>Website banner notifications</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>9. Contact Us</h2>
+                    <p>If you have questions about our use of cookies, please contact us:</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <h4>📧 Privacy Team</h4>
+                            <p>privacy@domislink.com</p>
+                        </div>
+                        <div class="contact-item">
+                            <h4>📍 Address</h4>
+                            <p>19 Powerline Avenue, Meiran<br>Lagos, Nigeria</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 DomisLink International Business Lagos Nig Ltd. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="./privacy-policy.html">Privacy Policy</a> |
+                <a href="./terms-of-service.html">Terms of Service</a> |
+                <a href="./cookie-policy.html">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .cookie-category {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .cookie-category h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .cookie-details {
+            margin: 1rem 0;
+        }
+
+        .cookie-details h4 {
+            color: var(--text);
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .toggle-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .toggle-btn.disabled {
+            background: #e74c3c;
+        }
+
+        .toggle-btn.enabled {
+            background: #27ae60;
+        }
+
+        .third-party-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .third-party-item {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .third-party-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .third-party-item a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .preference-controls, .browser-controls {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .btn-action {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .browser-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .browser-item {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .browser-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .impact-item {
+            background: var(--background);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .impact-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .retention-table {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .retention-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .retention-table th,
+        .retention-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .retention-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .retention-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .browser-grid,
+            .impact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .retention-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+
+    <script src="./js/privacy-compliance.js"></script>
+    <script>
+        function updateCookieStatus() {
+            const consent = JSON.parse(localStorage.getItem('domislink-cookie-consent') || '{}');
+            
+            // Update analytics status
+            const analyticsBtn = document.getElementById('analytics-btn');
+            const analyticsStatus = document.getElementById('analytics-status');
+            if (consent.analytics) {
+                analyticsBtn.className = 'toggle-btn enabled';
+                analyticsStatus.textContent = '✅ Enabled';
+            } else {
+                analyticsBtn.className = 'toggle-btn disabled';
+                analyticsStatus.textContent = '❌ Disabled';
+            }
+            
+            // Update marketing status
+            const marketingBtn = document.getElementById('marketing-btn');
+            const marketingStatus = document.getElementById('marketing-status');
+            if (consent.marketing) {
+                marketingBtn.className = 'toggle-btn enabled';
+                marketingStatus.textContent = '✅ Enabled';
+            } else {
+                marketingBtn.className = 'toggle-btn disabled';
+                marketingStatus.textContent = '❌ Disabled';
+            }
+            
+            // Update preferences status
+            const preferencesBtn = document.getElementById('preferences-btn');
+            const preferencesStatus = document.getElementById('preferences-status');
+            if (consent.preferences) {
+                preferencesBtn.className = 'toggle-btn enabled';
+                preferencesStatus.textContent = '✅ Enabled';
+            } else {
+                preferencesBtn.className = 'toggle-btn disabled';
+                preferencesStatus.textContent = '❌ Disabled';
+            }
+        }
+        
+        function toggleAnalytics() {
+            privacyManager.showPreferences();
+        }
+        
+        function toggleMarketing() {
+            privacyManager.showPreferences();
+        }
+        
+        function togglePreferences() {
+            privacyManager.showPreferences();
+        }
+        
+        // Update status on page load
+        document.addEventListener('DOMContentLoaded', updateCookieStatus);
+        
+        // Update status when consent changes
+        window.addEventListener('cookieConsentChanged', updateCookieStatus);
+    </script>
+</body>
+</html>

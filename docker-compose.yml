@@ -1,0 +1,236 @@
+version: "3.8"
+
+services:
+  # Hub - Landing Page (domislink.com)
+  hub:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        APP_NAME: hub
+    container_name: domislink-hub
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Real Estate App (realestate.domislink.com)
+  realestate:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        APP_NAME: realestate
+    container_name: domislink-realestate
+    ports:
+      - "3001:3000"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Tickets App (tickets.domislink.com)
+  tickets:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        APP_NAME: tickets
+    container_name: domislink-tickets
+    ports:
+      - "3002:3000"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Flight Monitor (fm.domislink.com)
+  flightmonitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        APP_NAME: flightmonitor
+    container_name: domislink-flightmonitor
+    ports:
+      - "3003:3000"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # TeachMaster (teachmaster.domislink.com)
+  teachmaster:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        APP_NAME: teachmaster
+    container_name: domislink-teachmaster
+    ports:
+      - "3004:3000"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Admin Panel (admin.domislink.com)
+  admin:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+      args:
+        APP_NAME: admin
+    container_name: domislink-admin
+    ports:
+      - "3005:3000"
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/api/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: domislink-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./nginx-logs:/var/log/nginx
+    depends_on:
+      - hub
+      - realestate
+      - tickets
+      - flightmonitor
+      - teachmaster
+      - admin
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  domislink-network:
+    driver: bridge
+
+volumes:
+  nginx-logs:

@@ -1,0 +1,19 @@
+{
+  "name": "@domislink/alerts",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "twilio": "^4.19.0",
+    "node-telegram-bot-api": "^0.64.0",
+    "whatsapp-web.js": "^1.23.0",
+    "nodemailer": "^6.9.0",
+    "@supabase/supabase-js": "^2.38.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/nodemailer": "^6.4.0",
+    "typescript": "^5.0.0"
+  }
+}

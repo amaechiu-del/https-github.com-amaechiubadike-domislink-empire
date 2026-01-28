@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Promo Engine - DomisLinker</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/theme-manager.js"></script>
+    <script src="./js/error-tracker.js"></script>
+    <script src="./js/privacy-compliance.js"></script>
+    <script src="./js/age-verification.js"></script>
+    <script src="./js/accessibility.js"></script>
+    <style>
+        .promo-engine {
+            background: #f8f9fa;
+            color: #333;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .engine-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .engine-header h1 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .engine-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        .input-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            border: 1px solid #e9ecef;
+        }
+        
+        .preview-panel {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            color: #333;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .language-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .language-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .language-option:hover,
+        .language-option.selected {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .language-option input[type=\"checkbox\"] {
+            width: auto;
+            margin: 0;
+        }
+        
+        .promo-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .promo-type-card {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .promo-type-card:hover,
+        .promo-type-card.selected {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+        
+        .promo-type-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+        
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .preview-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .preview-tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            color: #666;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .preview-tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+        }
+        
+        .preview-content {
+            display: none;
+        }
+        
+        .preview-content.active {
+            display: block;
+        }
+        
+        .promo-output {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        
+        .promo-output h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .promo-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(52, 152, 219, 0.05);
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+            color: #333;
+        }
+        
+        .promo-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .promo-actions button {
+            padding: 0.5rem 1rem;
+            background: #6c757d;
+            color: white;
+            border: 1px solid #6c757d;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .promo-actions button:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #3498db;
+        }
+        
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #dee2e6;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .engine-container {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .engine-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="promo-engine">
+        <header class="engine-header">
+            <h1>🤖 AI Promo Engine</h1>
+            <p>Generate multi-language promotional content with AI</p>
+        </header>
+        
+        <div class="engine-container">
+            <!-- Input Panel -->
+            <div class="input-panel">
+                <h3>🎯 Promo Configuration</h3>
+                
+                <div class="form-group">
+                    <label for="businessName">Business Name</label>
+                    <input type="text" id="businessName" placeholder="Enter your business name" value="DomisLink Properties">
+                </div>
+                
+                <div class="form-group">
+                    <label for="businessType">Business Type</label>
+                    <select id="businessType">
+                        <option value="restaurant">🍽️ Restaurant</option>
+                        <option value="retail" selected>🏪 Retail Store</option>
+                        <option value="service">🔧 Service Business</option>
+                        <option value="tech">💻 Tech Company</option>
+                        <option value="real-estate">🏠 Real Estate</option>
+                        <option value="fashion">👕 Fashion</option>
+                        <option value="health">🏥 Healthcare</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Promotion Type</label>
+                    <div class="promo-type-grid">
+                        <div class="promo-type-card selected" data-type="sale">
+                            <div class="icon">🔥</div>
+                            <div>Sale</div>
+                        </div>
+                        <div class="promo-type-card" data-type="launch">
+                            <div class="icon">🎉</div>
+                            <div>Launch</div>
+                        </div>
+                        <div class="promo-type-card" data-type="event">
+                            <div class="icon">🎪</div>
+                            <div>Event</div>
+                        </div>
+                        <div class="promo-type-card" data-type="brand">
+                            <div class="icon">⭐</div>
+                            <div>Brand</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="discount">Discount Percentage</label>
+                    <input type="number" id="discount" placeholder="30" value="30" min="5" max="90">
+                </div>
+                
+                <div class="form-group">
+                    <label>Target Languages</label>
+                    <div class="language-selector">
+                        <div class="language-option selected">
+                            <input type="checkbox" id="lang-en" checked>
+                            <label for="lang-en">🇺🇸 English</label>
+                        </div>
+                        <div class="language-option selected">
+                            <input type="checkbox" id="lang-es" checked>
+                            <label for="lang-es">🇪🇸 Spanish</label>
+                        </div>
+                        <div class="language-option">
+                            <input type="checkbox" id="lang-fr">
+                            <label for="lang-fr">🇫🇷 French</label>
+                        </div>
+                        <div class="language-option selected">
+                            <input type="checkbox" id="lang-yo" checked>
+                            <label for="lang-yo">🇳🇬 Yoruba</label>
+                        </div>
+                        <div class="language-option">
+                            <input type="checkbox" id="lang-ig">
+                            <label for="lang-ig">🇳🇬 Igbo</label>
+                        </div>
+                        <div class="language-option">
+                            <input type="checkbox" id="lang-ha">
+                            <label for="lang-ha">🇳🇬 Hausa</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="generate-btn" onclick="generatePromos()">
+                    🎯 Generate AI Promos
+                </button>
+            </div>
+            
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <h3>📱 Generated Promos</h3>
+                
+                <div class="preview-tabs">
+                    <button class="preview-tab active" onclick="switchTab('languages')">Languages</button>
+                    <button class="preview-tab" onclick="switchTab('platforms')">Platforms</button>
+                    <button class="preview-tab" onclick="switchTab('analytics')">Analytics</button>
+                </div>
+                
+                <div id="languages-content" class="preview-content active">
+                    <div id="promoResults">
+                        <div class="loading" style="display: none;">
+                            Generating AI promos...
+                        </div>
+                        <p style="text-align: center; color: #666; padding: 2rem;">
+                            Configure your settings and click "Generate AI Promos" to see results
+                        </p>
+                    </div>
+                </div>
+                
+                <div id="platforms-content" class="preview-content">
+                    <div id="platformResults">
+                        <p style="text-align: center; color: #666; padding: 2rem;">
+                            Platform-optimized versions will appear here
+                        </p>
+                    </div>
+                </div>
+                
+                <div id="analytics-content" class="preview-content">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                        <div class="stat-card">
+                            <h4>📊 Engagement Score</h4>
+                            <div class="stat-number" id="engagementScore">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>🌍 Languages</h4>
+                            <div class="stat-number" id="languageCount">--</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>📱 Platforms</h4>
+                            <div class="stat-number" id="platformCount">4</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>⚡ Generation Time</h4>
+                            <div class="stat-number" id="generationTime">--</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="./js/ai-promo-engine.js"></script>
+    <script>
+        let promoEngine;
+        let currentPromos = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            promoEngine = new AIPromoEngine();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // Promo type selection
+            document.querySelectorAll('.promo-type-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.promo-type-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Language selection
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    this.classList.toggle('selected', checkbox.checked);
+                });
+            });
+        }
+        
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.preview-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update content
+            document.querySelectorAll('.preview-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName + '-content').classList.add('active');
+        }
+        
+        function generatePromos() {
+            const startTime = Date.now();
+            
+            // Show loading
+            document.querySelector('.loading').style.display = 'block';
+            document.getElementById('promoResults').innerHTML = '<div class="loading">Generating AI promos...</div>';
+            
+            // Get form data
+            const businessName = document.getElementById('businessName').value;
+            const businessType = document.getElementById('businessType').value;
+            const discount = document.getElementById('discount').value;
+            const selectedPromoType = document.querySelector('.promo-type-card.selected').dataset.type;
+            
+            // Get selected languages
+            const selectedLanguages = [];
+            document.querySelectorAll('.language-option input:checked').forEach(checkbox => {
+                selectedLanguages.push(checkbox.id.replace('lang-', ''));
+            });
+            
+            if (selectedLanguages.length === 0) {
+                alert('Please select at least one language');
+                return;
+            }
+            
+            // Generate promos
+            const businessData = {
+                businessName: businessName || 'Your Business',
+                businessType: businessType,
+                promotion: {
+                    type: selectedPromoType,
+                    discount: discount || '30',
+                    style: 'modern'
+                },
+                targetLanguages: selectedLanguages,
+                platforms: ['instagram', 'facebook', 'twitter', 'whatsapp']
+            };
+            
+            // Simulate AI processing delay
+            setTimeout(() => {
+                currentPromos = promoEngine.generateMultiLanguageSet(businessData);
+                displayPromos(currentPromos);
+                displayPlatformResults(currentPromos);
+                updateAnalytics(selectedLanguages.length, Date.now() - startTime);
+                
+                document.querySelector('.loading').style.display = 'none';
+            }, 1500);
+        }
+        
+        function displayPromos(promos) {
+            const resultsContainer = document.getElementById('promoResults');
+            let html = '';
+            
+            Object.keys(promos).forEach(lang => {
+                const langName = promoEngine.languages[lang] || lang.toUpperCase();
+                const flagEmoji = getFlagEmoji(lang);
+                
+                html += `
+                    <div class="promo-output">
+                        <h4>${flagEmoji} ${langName}</h4>
+                        <div class="promo-text">${promos[lang].instagram}</div>
+                        <div class="promo-actions">
+                            <button onclick="copyToClipboard('${lang}')">📋 Copy</button>
+                            <button onclick="sharePromo('${lang}')">📤 Share</button>
+                            <button onclick="editPromo('${lang}')">✏️ Edit</button>
+                            <button onclick="savePromo('${lang}')">💾 Save</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            resultsContainer.innerHTML = html;
+        }
+        
+        function displayPlatformResults(promos) {
+            const platformContainer = document.getElementById('platformResults');
+            const platforms = ['instagram', 'facebook', 'twitter', 'whatsapp'];
+            const platformIcons = {
+                instagram: '📷',
+                facebook: '📘', 
+                twitter: '🐦',
+                whatsapp: '💬'
+            };
+            
+            let html = '<div class="platform-grid">';
+            
+            platforms.forEach(platform => {
+                html += `
+                    <div class="promo-output">
+                        <h4>${platformIcons[platform]} ${platform.charAt(0).toUpperCase() + platform.slice(1)}</h4>
+                `;
+                
+                Object.keys(promos).forEach(lang => {
+                    const flagEmoji = getFlagEmoji(lang);
+                    html += `
+                        <div class="promo-text" style="margin-bottom: 0.5rem; font-size: 0.9rem;">
+                            <strong>${flagEmoji} ${lang.toUpperCase()}:</strong><br>
+                            ${promos[lang][platform]}
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        <div class="promo-actions">
+                            <button onclick="copyPlatformPromos('${platform}')">📋 Copy All</button>
+                            <button onclick="schedulePosts('${platform}')">📅 Schedule</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            platformContainer.innerHTML = html;
+        }
+        
+        function updateAnalytics(languageCount, generationTime) {
+            document.getElementById('engagementScore').textContent = Math.floor(Math.random() * 30 + 70) + '%';
+            document.getElementById('languageCount').textContent = languageCount;
+            document.getElementById('generationTime').textContent = (generationTime / 1000).toFixed(1) + 's';
+        }
+        
+        function getFlagEmoji(lang) {
+            const flags = {
+                'en': '🇺🇸', 'es': '🇪🇸', 'fr': '🇫🇷', 'de': '🇩🇪',
+                'pt': '🇵🇹', 'it': '🇮🇹', 'ru': '🇷🇺', 'zh': '🇨🇳',
+                'ja': '🇯🇵', 'ko': '🇰🇷', 'ar': '🇸🇦', 'hi': '🇮🇳',
+                'yo': '🇳🇬', 'ig': '🇳🇬', 'ha': '🇳🇬'
+            };
+            return flags[lang] || '🌍';
+        }
+        
+        function copyToClipboard(lang) {
+            const text = currentPromos[lang].instagram;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Promo copied to clipboard!');
+            });
+        }
+        
+        function sharePromo(lang) {
+            const text = currentPromos[lang].instagram;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'AI Generated Promo',
+                    text: text
+                });
+            } else {
+                copyToClipboard(lang);
+            }
+        }
+        
+        function editPromo(lang) {
+            const newText = prompt('Edit promo:', currentPromos[lang].instagram);
+            if (newText) {
+                currentPromos[lang].instagram = newText;
+                displayPromos(currentPromos);
+            }
+        }
+        
+        function savePromo(lang) {
+            const promos = JSON.parse(localStorage.getItem('savedPromos') || '[]');
+            promos.push({
+                language: lang,
+                text: currentPromos[lang].instagram,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('savedPromos', JSON.stringify(promos));
+            alert('Promo saved locally!');
+        }
+        
+        function copyPlatformPromos(platform) {
+            let allText = `${platform.toUpperCase()} PROMOS:\n\n`;
+            Object.keys(currentPromos).forEach(lang => {
+                allText += `${getFlagEmoji(lang)} ${lang.toUpperCase()}:\n${currentPromos[lang][platform]}\n\n`;
+            });
+            
+            navigator.clipboard.writeText(allText).then(() => {
+                alert(`All ${platform} promos copied to clipboard!`);
+            });
+        }
+        
+        function schedulePosts(platform) {
+            alert(`Scheduling feature for ${platform} coming soon!`);
+        }
+    </script>
+</body>
+</html>

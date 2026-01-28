@@ -1,0 +1,46 @@
+# Cloudflare Pages Redirects
+# Handle common 404 patterns and redirects
+
+# Root redirects
+/home / 301
+/index / 301
+/main / 301
+
+# Page redirects
+/communities /community.html 301
+/browse /community.html 301
+/listings /community.html 301
+
+/post /post-ad.html 301
+/create /post-ad.html 301
+/add /post-ad.html 301
+/new /post-ad.html 301
+
+/agents /agent.html 301
+/become-agent /agent.html 301
+/join /agent.html 301
+/register /agent.html 301
+/signup /agent.html 301
+/login /agent.html 301
+
+/profile /dashboard.html 301
+/account /dashboard.html 301
+/my-account /dashboard.html 301
+
+/ai /ai-promo-engine.html 301
+/promo /ai-promo-engine.html 301
+/marketing /ai-promo-engine.html 301
+
+# Handle file extensions
+/*.php /404.html 404
+/*.asp /404.html 404
+/*.jsp /404.html 404
+
+# Handle old paths that might exist
+/wp-admin /404.html 404
+/admin /404.html 404
+/administrator /404.html 404
+/wp-login.php /404.html 404
+
+# Catch-all for unmatched routes
+/* /404.html 404

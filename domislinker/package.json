@@ -1,0 +1,50 @@
+{
+  "name": "domislinker",
+  "version": "1.0.0",
+  "description": "DomisLinker - Real Estate Platform",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server . -p 3000 -o",
+    "build": "npm run optimize:images && npm run minify:css && npm run minify:js",
+    "optimize:images": "imagemin assets/images/*.{jpg,jpeg,png} --out-dir=assets/images/optimized --plugin=mozjpeg --plugin=pngquant --plugin=webp",
+    "minify:css": "cleancss-cli css/style.css -o css/style.min.css",
+    "minify:js": "terser js/*.js --compress --mangle --output js/app.min.js",
+    "deploy": "wrangler pages deploy . --project-name=domislinker",
+    "deploy:workers": "wrangler deploy workers/api.js --name domislinker-api",
+    "db:create": "wrangler d1 create domislinker-db",
+    "db:migrate": "wrangler d1 execute domislinker-db --file=database-schema.sql",
+    "db:local": "wrangler d1 execute domislinker-db --local --file=database-schema.sql",
+    "preview": "wrangler pages dev .",
+    "lint": "eslint js/*.js",
+    "format": "prettier --write \"**/*.{html,css,js,json}\"",
+    "validate": "html-validate *.html",
+    "lighthouse": "lighthouse http://localhost:3000 --output=html --output-path=./lighthouse-report.html",
+    "test:accessibility": "axe-cli http://localhost:3000"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0",
+    "http-server": "^14.1.1",
+    "imagemin-cli": "^7.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-webp": "^7.0.0",
+    "clean-css-cli": "^5.6.2",
+    "terser": "^5.19.2",
+    "eslint": "^8.45.0",
+    "prettier": "^3.0.0",
+    "html-validate": "^8.0.0",
+    "lighthouse": "^11.0.0",
+    "@axe-core/cli": "^4.7.0"
+  },
+  "keywords": [
+    "real-estate",
+    "property",
+    "cloudflare",
+    "static-site"
+  ],
+  "author": "DomisLink International Business Lagos Nig Ltd",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Property - DomisLinker</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="./js/theme-manager.js"></script>
+    <script src="./js/error-tracker.js"></script>
+    <script src="./js/privacy-compliance.js"></script>
+    <script src="./js/age-verification.js"></script>
+    <script src="./js/accessibility.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo"><a href="./index.html">🏠 DomisLinker</a></h1>
+            <nav>
+                <a href="./community.html">Communities</a>
+                <a href="./agent.html">Become Agent</a>
+                <a href="./post-ad.html" class="btn-primary active">Post Ad</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="post-ad-form">
+        <div class="container">
+            <h2>Post Your Property</h2>
+            
+            <div class="form-container">
+                <form id="propertyForm">
+                    <div class="form-grid">
+                        <input type="text" id="title" placeholder="Property Title" required>
+                        <select id="propertyType" required>
+                            <option value="">Property Type</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="house">House</option>
+                            <option value="land">Land</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                        <input type="number" id="price" placeholder="Price" required>
+                        <select id="currency">
+                            <option value="USD">USD ($)</option>
+                            <option value="NGN">NGN (₦)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                        </select>
+                        <input type="text" id="location" placeholder="Location" required>
+                        <input type="number" id="bedrooms" placeholder="Bedrooms">
+                        <input type="number" id="bathrooms" placeholder="Bathrooms">
+                        <input type="number" id="area" placeholder="Area (sqft)">
+                    </div>
+                    
+                    <textarea id="description" placeholder="Property Description" rows="4" required></textarea>
+                    
+                    <div class="pricing-plans">
+                        <h3>Choose Your Plan</h3>
+                        <div class="plans-grid">
+                            <div class="plan-card" onclick="selectPlan('basic')">
+                                <h4>Basic Listing</h4>
+                                <div class="price">$5</div>
+                                <ul>
+                                    <li>30 days listing</li>
+                                    <li>5 photos</li>
+                                    <li>Standard visibility</li>
+                                </ul>
+                            </div>
+                            <div class="plan-card" onclick="selectPlan('premium')">
+                                <h4>Premium Listing</h4>
+                                <div class="price">$20</div>
+                                <ul>
+                                    <li>60 days listing</li>
+                                    <li>20 photos</li>
+                                    <li>Priority placement</li>
+                                </ul>
+                            </div>
+                            <div class="plan-card" onclick="selectPlan('featured')">
+                                <h4>Featured Boost</h4>
+                                <div class="price">$50</div>
+                                <ul>
+                                    <li>90 days listing</li>
+                                    <li>Unlimited photos</li>
+                                    <li>Top placement</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" onclick="processPayment()" class="submit-btn">Pay & Post Property</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script src="./js/app.js"></script>
+    <script src="./js/ads.js"></script>
+    <script>
+        let selectedPlan = 'basic';
+        
+        function selectPlan(plan) {
+            selectedPlan = plan;
+            document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
+            event.target.closest('.plan-card').classList.add('selected');
+        }
+        
+        function processPayment() {
+            const formData = {
+                title: document.getElementById('title').value,
+                propertyType: document.getElementById('propertyType').value,
+                price: document.getElementById('price').value,
+                currency: document.getElementById('currency').value,
+                location: document.getElementById('location').value,
+                bedrooms: document.getElementById('bedrooms').value,
+                bathrooms: document.getElementById('bathrooms').value,
+                area: document.getElementById('area').value,
+                description: document.getElementById('description').value,
+                plan: selectedPlan
+            };
+            
+            if (!formData.title || !formData.propertyType || !formData.price || !formData.location || !formData.description) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // AI Gate Check (frontend mock)
+            if (aiGateCheck(formData)) {
+                initiatePayment(formData);
+            }
+        }
+    </script>
+    <script src="./js/ai-gate.js"></script>
+</body>
+</html>

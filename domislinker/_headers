@@ -1,0 +1,23 @@
+/*
+Security Headers for Cloudflare Pages
+*/
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+
+# 404 Error Handling
+/404.html
+  X-Robots-Tag: noindex
+
+# Redirect common 404s to proper pages
+/home /
+/index /
+/communities /community.html
+/post /post-ad.html
+/agents /agent.html
+/login /agent.html
+/signup /agent.html

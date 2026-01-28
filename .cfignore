@@ -1,0 +1,23 @@
+# Cloudflare Pages ignore patterns
+node_modules/
+.env*
+.git/
+.turbo/
+.next/cache/
+*.log
+.DS_Store
+Thumbs.db
+coverage/
+.nyc_output/
+*.tgz
+*.tar.gz
+.cache/
+dist/
+build/
+out/
+.vercel/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
