@@ -1,0 +1,99 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: domislink-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - domislink.com
+    - "*.domislink.com"
+    secretName: domislink-tls
+  rules:
+  # Main domain - Hub
+  - host: domislink.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
+            port:
+              number: 8080
+  
+  # API subdomain
+  - host: api.domislink.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
+            port:
+              number: 8080
+  
+  # Real Estate subdomain
+  - host: realestate.domislink.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
+            port:
+              number: 8080
+  
+  # Tickets subdomain
+  - host: tickets.domislink.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
+            port:
+              number: 8080
+  
+  # Flight Monitor subdomain
+  - host: fm.domislink.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
+            port:
+              number: 8080
+  
+  # TeachMaster subdomain
+  - host: teachmaster.domislink.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
+            port:
+              number: 8080
+  
+  # Admin subdomain
+  - host: admin.domislink.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: gateway
+            port:
+              number: 8080

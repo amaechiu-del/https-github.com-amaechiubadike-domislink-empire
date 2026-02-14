@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  labels:
+    app: notification-service
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      containers:
+      - name: notification-service
+        image: ghcr.io/amaechiu-del/domislink-notification-service:latest
+        ports:
+        - containerPort: 4003
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "4003"
+        envFrom:
+        - configMapRef:
+            name: notification-service-config
+        - secretRef:
+            name: notification-service-secrets
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 4003
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 4003
+          initialDelaySeconds: 10
+          periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  labels:
+    app: notification-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 4003
+    targetPort: 4003
+    protocol: TCP
+  selector:
+    app: notification-service
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notification-service-config
+data:
+  LOG_LEVEL: "info"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: notification-service-secrets
+type: Opaque
+stringData:
+  # Add secrets here
+  DATABASE_URL: ""

@@ -1,0 +1,321 @@
+version: "3.8"
+
+services:
+  # ==================== Frontend Services ====================
+  
+  # Hub - Landing Page (domislink.com)
+  hub:
+    build:
+      context: ./services/hub
+      dockerfile: Dockerfile
+    container_name: domislink-hub
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - API_GATEWAY_URL=http://gateway:8080
+      - AUTH_SERVICE_URL=http://auth-service:4000
+      - PAYMENTS_SERVICE_URL=http://payments-service:4001
+      - GEOLOCATION_SERVICE_URL=http://geolocation-service:4002
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - auth-service
+      - geolocation-service
+
+  # Real Estate Service
+  realestate:
+    build:
+      context: ./services/realestate
+      dockerfile: Dockerfile
+    container_name: domislink-realestate
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - API_GATEWAY_URL=http://gateway:8080
+      - AUTH_SERVICE_URL=http://auth-service:4000
+      - PAYMENTS_SERVICE_URL=http://payments-service:4001
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - auth-service
+
+  # Tickets Service
+  tickets:
+    build:
+      context: ./services/tickets
+      dockerfile: Dockerfile
+    container_name: domislink-tickets
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - API_GATEWAY_URL=http://gateway:8080
+      - AUTH_SERVICE_URL=http://auth-service:4000
+      - PAYMENTS_SERVICE_URL=http://payments-service:4001
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - auth-service
+      - payments-service
+
+  # Flight Monitor Service
+  flightmonitor:
+    build:
+      context: ./services/flightmonitor
+      dockerfile: Dockerfile
+    container_name: domislink-flightmonitor
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - API_GATEWAY_URL=http://gateway:8080
+      - AUTH_SERVICE_URL=http://auth-service:4000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3003/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - auth-service
+
+  # TeachMaster Service
+  teachmaster:
+    build:
+      context: ./services/teachmaster
+      dockerfile: Dockerfile
+    container_name: domislink-teachmaster
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+      - API_GATEWAY_URL=http://gateway:8080
+      - AUTH_SERVICE_URL=http://auth-service:4000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3004/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - auth-service
+
+  # Admin Service
+  admin:
+    build:
+      context: ./services/admin
+      dockerfile: Dockerfile
+    container_name: domislink-admin
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+      - API_GATEWAY_URL=http://gateway:8080
+      - AUTH_SERVICE_URL=http://auth-service:4000
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3005/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - auth-service
+
+  # ==================== Backend Services ====================
+
+  # Authentication Service
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    container_name: domislink-auth-service
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - JWT_SECRET=${JWT_SECRET:-change-this-secret-in-production}
+      - DATABASE_URL=${AUTH_DATABASE_URL:-postgresql://user:password@postgres:5432/domislink_auth}
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Payments Service
+  payments-service:
+    build:
+      context: ./services/payments-service
+      dockerfile: Dockerfile
+    container_name: domislink-payments-service
+    ports:
+      - "4001:4001"
+    environment:
+      - NODE_ENV=production
+      - PORT=4001
+      - DATABASE_URL=${PAYMENTS_DATABASE_URL:-postgresql://user:password@postgres:5432/domislink_payments}
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Geolocation Service
+  geolocation-service:
+    build:
+      context: ./services/geolocation-service
+      dockerfile: Dockerfile
+    container_name: domislink-geolocation-service
+    ports:
+      - "4002:4002"
+    environment:
+      - NODE_ENV=production
+      - PORT=4002
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Notification Service
+  notification-service:
+    build:
+      context: ./services/notification-service
+      dockerfile: Dockerfile
+    container_name: domislink-notification-service
+    ports:
+      - "4003:4003"
+    environment:
+      - NODE_ENV=production
+      - PORT=4003
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4003/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== API Gateway ====================
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: domislink-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+      - HUB_SERVICE_URL=http://hub:3000
+      - REALESTATE_SERVICE_URL=http://realestate:3001
+      - TICKETS_SERVICE_URL=http://tickets:3002
+      - FLIGHTMONITOR_SERVICE_URL=http://flightmonitor:3003
+      - TEACHMASTER_SERVICE_URL=http://teachmaster:3004
+      - ADMIN_SERVICE_URL=http://admin:3005
+      - AUTH_SERVICE_URL=http://auth-service:4000
+      - PAYMENTS_SERVICE_URL=http://payments-service:4001
+      - GEOLOCATION_SERVICE_URL=http://geolocation-service:4002
+      - NOTIFICATION_SERVICE_URL=http://notification-service:4003
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - hub
+      - realestate
+      - tickets
+      - flightmonitor
+      - teachmaster
+      - admin
+      - auth-service
+      - payments-service
+      - geolocation-service
+      - notification-service
+
+  # ==================== Databases (Optional) ====================
+
+  # PostgreSQL Database
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: domislink-postgres
+  #   environment:
+  #     - POSTGRES_USER=domislink
+  #     - POSTGRES_PASSWORD=domislink_password
+  #     - POSTGRES_DB=domislink
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   networks:
+  #     - domislink-network
+  #   restart: unless-stopped
+
+  # Redis (for caching and queues)
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: domislink-redis
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - domislink-network
+  #   restart: unless-stopped
+
+networks:
+  domislink-network:
+    driver: bridge
+
+# volumes:
+#   postgres-data:

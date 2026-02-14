@@ -1,0 +1,31 @@
+
+# Microservices
+services/*/node_modules
+services/*/.env
+services/*/.env.local
+services/*/.next
+services/*/dist
+services/*/build
+services/*/.turbo
+
+# Gateway
+gateway/node_modules
+gateway/.env
+gateway/.env.local
+gateway/dist
+gateway/build
+
+# Logs
+services/*/logs
+services/*/*.log
+gateway/logs
+gateway/*.log
+
+# Build artifacts
+services/*/.next
+services/*/out
+services/*/.cache
+
+# Temporary files
+services/create-service-configs.sh
+services/create-backend-services.sh
