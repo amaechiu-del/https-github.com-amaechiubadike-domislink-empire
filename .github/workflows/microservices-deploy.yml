@@ -22,10 +22,17 @@ env:
   REGISTRY: ghcr.io
   IMAGE_PREFIX: ${{ github.repository_owner }}/domislink
 
+# Set minimal permissions for the workflow
+permissions:
+  contents: read
+
 jobs:
   # Detect which services have changed
   detect-changes:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       auth-service: ${{ steps.filter.outputs.auth-service }}
       payments-service: ${{ steps.filter.outputs.payments-service }}
@@ -72,6 +79,9 @@ jobs:
   build-backend-services:
     needs: detect-changes
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     strategy:
       matrix:
         service:
@@ -126,6 +136,9 @@ jobs:
   build-frontend-services:
     needs: detect-changes
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     strategy:
       matrix:
         service:
@@ -184,6 +197,9 @@ jobs:
   build-gateway:
     needs: detect-changes
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     if: needs.detect-changes.outputs.gateway == 'true'
     
     steps:
@@ -226,6 +242,8 @@ jobs:
   deploy:
     needs: [build-backend-services, build-frontend-services, build-gateway]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     
     steps:
