@@ -10,12 +10,12 @@ Location detection and currency conversion
 
 ## Development
 
-\`\`\`bash
+```bash
 npm install
 npm run dev
 npm run build
 npm start
-\`\`\`
+```
 
 ## Environment Variables
 
@@ -28,7 +28,7 @@ See \`.env.example\`
 
 ## Docker
 
-\`\`\`bash
+```bash
 docker build -t domislink-geolocation-service:latest .
 docker run -p 4002:4002 --env-file .env domislink-geolocation-service:latest
-\`\`\`
+```

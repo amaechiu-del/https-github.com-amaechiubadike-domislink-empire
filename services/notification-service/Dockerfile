@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for Auth Service
+# Multi-stage Dockerfile for Notification Service
 FROM node:20-alpine AS base
 
 # Install dependencies only when needed
@@ -33,8 +33,8 @@ COPY --from=builder /app/package.json ./package.json
 
 USER notification-serviceuser
 
-EXPOSE 4000
+EXPOSE 4003
 
-ENV PORT 4000
+ENV PORT 4003
 
 CMD ["node", "dist/index.js"]

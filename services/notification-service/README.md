@@ -10,12 +10,12 @@ Email, SMS, and push notifications
 
 ## Development
 
-\`\`\`bash
+```bash
 npm install
 npm run dev
 npm run build
 npm start
-\`\`\`
+```
 
 ## Environment Variables
 
@@ -28,7 +28,7 @@ See \`.env.example\`
 
 ## Docker
 
-\`\`\`bash
+```bash
 docker build -t domislink-notification-service:latest .
 docker run -p 4003:4003 --env-file .env domislink-notification-service:latest
-\`\`\`
+```

@@ -10,12 +10,12 @@ Payment processing and wallet management
 
 ## Development
 
-\`\`\`bash
+```bash
 npm install
 npm run dev
 npm run build
 npm start
-\`\`\`
+```
 
 ## Environment Variables
 
@@ -28,7 +28,7 @@ See \`.env.example\`
 
 ## Docker
 
-\`\`\`bash
+```bash
 docker build -t domislink-payments-service:latest .
 docker run -p 4001:4001 --env-file .env domislink-payments-service:latest
-\`\`\`
+```

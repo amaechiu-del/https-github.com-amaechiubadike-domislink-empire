@@ -1,4 +1,4 @@
-# Multi-stage Dockerfile for Auth Service
+# Multi-stage Dockerfile for Geolocation Service
 FROM node:20-alpine AS base
 
 # Install dependencies only when needed
@@ -33,8 +33,8 @@ COPY --from=builder /app/package.json ./package.json
 
 USER geolocation-serviceuser
 
-EXPOSE 4000
+EXPOSE 4002
 
-ENV PORT 4000
+ENV PORT 4002
 
 CMD ["node", "dist/index.js"]
