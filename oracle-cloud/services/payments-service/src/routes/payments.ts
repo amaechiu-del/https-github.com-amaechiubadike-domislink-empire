@@ -195,9 +195,19 @@ router.post('/webhook', async (req: Request, res: Response) => {
       });
     }
 
-    // Verify webhook signature
-    const payload = JSON.stringify(req.body);
-    const isValid = paystackAPI.verifyWebhookSignature(payload, signature);
+    // Get raw body from middleware
+    const rawBody = (req as any).rawBody;
+    
+    if (!rawBody) {
+      logger.error('Raw body not available for webhook verification');
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid request',
+      });
+    }
+    
+    // Verify webhook signature using raw body
+    const isValid = paystackAPI.verifyWebhookSignature(rawBody, signature);
 
     if (!isValid) {
       logger.warn('Invalid webhook signature');

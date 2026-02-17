@@ -5,7 +5,7 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import winston from 'winston';
-import paymentsRoutes from './routes/payments';
+import authRoutes from './routes/auth';
 
 dotenv.config();
 
@@ -30,7 +30,7 @@ export const supabase: SupabaseClient = createClient(
 );
 
 const app: Application = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 // Security middleware
 app.use(helmet());
@@ -42,40 +42,26 @@ app.use(cors({
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 30, // 30 requests per minute for payments
-  message: 'Too many payment requests from this IP, please try again later.',
+  max: 10, // 10 requests per minute
+  message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-app.use('/api/payments', limiter);
+app.use('/api/auth', limiter);
 
-// Middleware to save raw body for webhook signature verification
-app.use('/api/payments/webhook', (req: Request, res: Response, next: any) => {
-  let data = '';
-  req.setEncoding('utf8');
-  req.on('data', (chunk) => {
-    data += chunk;
-  });
-  req.on('end', () => {
-    (req as any).rawBody = data;
-    req.body = JSON.parse(data);
-    next();
-  });
-});
-
-// Body parsing for other routes
+// Body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/payments', paymentsRoutes);
+app.use('/api/auth', authRoutes);
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'healthy',
-    service: 'payments-service',
+    service: 'auth-service',
     timestamp: new Date().toISOString(),
     uptime: process.uptime()
   });
@@ -83,13 +69,13 @@ app.get('/health', (req: Request, res: Response) => {
 
 // Metrics endpoint (for Prometheus)
 app.get('/metrics', (req: Request, res: Response) => {
-  res.status(200).send(`# HELP payments_service_health Service health status
-# TYPE payments_service_health gauge
-payments_service_health 1
+  res.status(200).send(`# HELP auth_service_health Service health status
+# TYPE auth_service_health gauge
+auth_service_health 1
 
-# HELP payments_service_uptime Service uptime in seconds
-# TYPE payments_service_uptime counter
-payments_service_uptime ${Math.floor(process.uptime())}
+# HELP auth_service_uptime Service uptime in seconds
+# TYPE auth_service_uptime counter
+auth_service_uptime ${Math.floor(process.uptime())}
 `);
 });
 
@@ -114,7 +100,7 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 
 // Start server
 app.listen(PORT, () => {
-  logger.info(`🚀 Payments Service running on port ${PORT}`);
+  logger.info(`🚀 Auth Service running on port ${PORT}`);
   logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
   logger.info(`Health check: http://localhost:${PORT}/health`);
 });
