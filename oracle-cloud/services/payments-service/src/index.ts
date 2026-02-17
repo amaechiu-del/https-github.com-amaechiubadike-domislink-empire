@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import winston from 'winston';
 import paymentsRoutes from './routes/payments';
+import { RequestWithRawBody } from './types/express';
 
 dotenv.config();
 
@@ -51,16 +52,24 @@ const limiter = rateLimit({
 app.use('/api/payments', limiter);
 
 // Middleware to save raw body for webhook signature verification
-app.use('/api/payments/webhook', (req: Request, res: Response, next: any) => {
+app.use('/api/payments/webhook', (req: RequestWithRawBody, res: Response, next: any) => {
   let data = '';
   req.setEncoding('utf8');
   req.on('data', (chunk) => {
     data += chunk;
   });
   req.on('end', () => {
-    (req as any).rawBody = data;
-    req.body = JSON.parse(data);
-    next();
+    req.rawBody = data;
+    try {
+      req.body = JSON.parse(data);
+      next();
+    } catch (error) {
+      logger.error('Invalid JSON in webhook payload:', error);
+      res.status(400).json({
+        success: false,
+        message: 'Invalid JSON payload',
+      });
+    }
   });
 });
 

@@ -229,7 +229,9 @@ All operations are logged using Winston:
 
 ## Testing Paystack
 
-Use Paystack test cards:
+**⚠️ WARNING: These test credentials ONLY work in Paystack test mode (test API keys). Never use test cards with production keys.**
+
+Use Paystack test cards in test environment:
 
 **Successful Payment:**
 - Card: 4084084084084081

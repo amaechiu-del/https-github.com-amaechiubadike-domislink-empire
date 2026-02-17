@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import Joi from 'joi';
 import { supabase, logger } from '../index';
 import { paystackAPI, PaystackTransaction } from '../utils/paystack';
+import { RequestWithRawBody } from '../types/express';
 
 const router = Router();
 
@@ -183,7 +184,7 @@ router.get('/verify/:reference', async (req: Request, res: Response) => {
  * POST /api/payments/webhook
  * Handle Paystack webhook events
  */
-router.post('/webhook', async (req: Request, res: Response) => {
+router.post('/webhook', async (req: RequestWithRawBody, res: Response) => {
   try {
     const signature = req.headers['x-paystack-signature'] as string;
 
@@ -196,7 +197,7 @@ router.post('/webhook', async (req: Request, res: Response) => {
     }
 
     // Get raw body from middleware
-    const rawBody = (req as any).rawBody;
+    const rawBody = req.rawBody;
     
     if (!rawBody) {
       logger.error('Raw body not available for webhook verification');
