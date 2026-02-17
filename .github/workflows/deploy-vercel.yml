@@ -8,6 +8,9 @@ on:
       - 'packages/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: '20'
 
@@ -16,6 +19,8 @@ jobs:
   deploy-hub:
     name: Deploy Hub to Vercel
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,6 +54,8 @@ jobs:
   deploy-tickets:
     name: Deploy Tickets to Vercel
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -82,6 +89,8 @@ jobs:
   deploy-flightmonitor:
     name: Deploy Flight Monitor to Vercel
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -115,6 +124,8 @@ jobs:
   deploy-teachmaster:
     name: Deploy TeachMaster to Vercel
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -148,6 +159,8 @@ jobs:
   deploy-admin:
     name: Deploy Admin to Vercel
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -181,6 +194,8 @@ jobs:
   deploy-realestate:
     name: Deploy Real Estate to Vercel
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4

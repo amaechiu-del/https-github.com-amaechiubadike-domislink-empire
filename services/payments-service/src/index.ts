@@ -5,6 +5,7 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import axios from 'axios';
+import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 
 dotenv.config();
@@ -141,9 +142,12 @@ app.post('/api/payments/webhook', async (req: Request, res: Response) => {
     const body = JSON.stringify(req.body);
 
     // Verify webhook signature
-    const crypto = require('crypto');
+    if (!PAYSTACK_SECRET_KEY) {
+      return res.status(500).json({ error: 'Paystack secret key not configured' });
+    }
+
     const expectedHash = crypto
-      .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
+      .createHmac('sha512', PAYSTACK_SECRET_KEY)
       .update(body)
       .digest('hex');
 
