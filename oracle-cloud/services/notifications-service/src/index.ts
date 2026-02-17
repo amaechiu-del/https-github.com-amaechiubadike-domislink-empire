@@ -36,6 +36,7 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+// Health check endpoint - intentionally not rate-limited for monitoring systems
 app.get('/api/health/detailed', async (req: Request, res: Response) => {
   try {
     const emailConnected = await emailService.verifyConnection();
