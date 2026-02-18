@@ -17,13 +17,16 @@ jobs:
         with:
           node-version: '20'
       
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       
       - name: Build real estate app
-        run: |
-          cd apps/realestate
-          npm run build
+        run: pnpm run build:realestate
         env:
           NODE_ENV: production
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}

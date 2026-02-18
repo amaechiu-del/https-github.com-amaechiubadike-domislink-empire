@@ -1,0 +1,11 @@
+# Cloudflare Workers Builds configuration
+# This file is used by Cloudflare's automatic GitHub integration
+
+name = "https-githubcomamaechiubadike-domislink-empire"
+compatibility_date = "2024-01-01"
+
+# Main entry point
+main = "../../domislinker/workers/api.js"
+
+[vars]
+ENVIRONMENT = "production"

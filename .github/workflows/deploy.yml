@@ -27,15 +27,20 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
 
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
+
             - name: Install dependencies
-              run: npm install
+              run: pnpm install
 
             - name: Run linter
-              run: npm run lint
+              run: pnpm run lint
               continue-on-error: true
 
             - name: Type check
-              run: npm run type-check
+              run: pnpm run type-check
               continue-on-error: true
 
     # Build all apps
@@ -63,11 +68,16 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
 
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
+
             - name: Install dependencies
-              run: npm install
+              run: pnpm install
 
             - name: Build ${{ matrix.app }}
-              run: npm run build:${{ matrix.app }}
+              run: pnpm run build:${{ matrix.app }}
               env:
                   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
                   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
@@ -106,8 +116,13 @@ jobs:
               with:
                   node-version: ${{ env.NODE_VERSION }}
 
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
+
             - name: Install dependencies
-              run: npm install
+              run: pnpm install
 
             - name: Download build artifacts
               uses: actions/download-artifact@v4

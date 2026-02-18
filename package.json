@@ -29,5 +29,5 @@
     "turbo": "latest",
     "typescript": "^5.0.0"
   },
-  "packageManager": "npm@10.0.0"
+  "packageManager": "pnpm@9.0.0"
 }
