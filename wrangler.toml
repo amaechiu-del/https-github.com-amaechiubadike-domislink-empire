@@ -1,63 +1,7 @@
 # Cloudflare Workers configuration for DomisLink Empire
-name = "domislink-empire"
+name = "https-githubcomamaechiubadike-domislink-empire"
 compatibility_date = "2024-01-01"
+main = "worker.js"
 
-# Hub App (domislink.com)
-[[pages_projects]]
-name = "domislink-hub"
-production_branch = "main"
-build_command = "npm run build:hub"
-build_output_directory = "apps/hub/.next"
-
-[pages_projects.env_vars]
-NODE_ENV = "production"
-
-# Real Estate App (realestate.domislink.com)
-[[pages_projects]]
-name = "domislink-realestate"
-production_branch = "main"
-build_command = "npm run build:realestate"
-build_output_directory = "apps/realestate/.next"
-
-[pages_projects.env_vars]
-NODE_ENV = "production"
-
-# Tickets App (tickets.domislink.com)
-[[pages_projects]]
-name = "domislink-tickets"
-production_branch = "main"
-build_command = "npm run build:tickets"
-build_output_directory = "apps/tickets/.next"
-
-[pages_projects.env_vars]
-NODE_ENV = "production"
-
-# Flight Monitor App (fm.domislink.com)
-[[pages_projects]]
-name = "domislink-flightmonitor"
-production_branch = "main"
-build_command = "npm run build:flightmonitor"
-build_output_directory = "apps/flightmonitor/.next"
-
-[pages_projects.env_vars]
-NODE_ENV = "production"
-
-# TeachMaster App (teachmaster.domislink.com)
-[[pages_projects]]
-name = "domislink-teachmaster"
-production_branch = "main"
-build_command = "npm run build:teachmaster"
-build_output_directory = "apps/teachmaster/.next"
-
-[pages_projects.env_vars]
-NODE_ENV = "production"
-
-# Admin App (admin.domislink.com)
-[[pages_projects]]
-name = "domislink-admin"
-production_branch = "main"
-build_command = "npm run build:admin"
-build_output_directory = "apps/admin/.next"
-
-[pages_projects.env_vars]
-NODE_ENV = "production"
+[vars]
+ENVIRONMENT = "production"

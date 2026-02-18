@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "https-githubcomamaechiubadike-domislink-empire",
+  "compatibility_date": "2024-01-01",
+  "main": "worker.js",
+  "vars": {
+    "ENVIRONMENT": "production"
+  }
+}

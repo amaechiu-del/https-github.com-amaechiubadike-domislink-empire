@@ -10,10 +10,17 @@
     "build": "turbo run build",
     "start": "turbo run start",
     "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
     "dev:hub": "cd apps/hub && npm run dev",
     "dev:realestate": "cd apps/realestate && npm run dev",
     "dev:tickets": "cd apps/tickets && npm run dev",
-    "dev:teachmaster": "cd apps/teachmaster && npm run dev"
+    "dev:teachmaster": "cd apps/teachmaster && npm run dev",
+    "build:hub": "turbo run build --filter=hub",
+    "build:realestate": "turbo run build --filter=realestate",
+    "build:tickets": "turbo run build --filter=tickets",
+    "build:flightmonitor": "turbo run build --filter=flightmonitor",
+    "build:teachmaster": "turbo run build --filter=teachmaster",
+    "build:admin": "turbo run build --filter=admin"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -22,5 +29,5 @@
     "turbo": "latest",
     "typescript": "^5.0.0"
   },
-  "packageManager": "npm@10.0.0"
+  "packageManager": "pnpm@9.0.0"
 }
