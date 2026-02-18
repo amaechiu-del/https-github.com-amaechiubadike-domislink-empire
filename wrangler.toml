@@ -1,13 +1,7 @@
 # Cloudflare Workers configuration for DomisLink Empire
-# Main worker entry point is a simple API health check
-
 name = "https-githubcomamaechiubadike-domislink-empire"
 compatibility_date = "2024-01-01"
-main = "domislinker/workers/api.js"
-
-# No build step required - the worker is plain JavaScript
-[build]
-command = ""
+main = "worker.js"
 
 [vars]
 ENVIRONMENT = "production"
