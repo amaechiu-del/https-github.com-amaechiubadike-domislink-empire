@@ -1,12 +1,13 @@
 # Cloudflare Workers configuration for DomisLink Empire
-# This is a placeholder configuration - actual Workers are deployed from domislinker/
-# Pages projects are configured via Cloudflare Dashboard, not wrangler.toml
+# Main worker entry point is a simple API health check
 
 name = "https-githubcomamaechiubadike-domislink-empire"
 compatibility_date = "2024-01-01"
-
-# Main entry point - a simple health check worker
 main = "domislinker/workers/api.js"
+
+# No build step required - the worker is plain JavaScript
+[build]
+command = ""
 
 [vars]
 ENVIRONMENT = "production"
