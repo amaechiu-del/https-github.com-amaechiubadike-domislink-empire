@@ -1,26 +1,22 @@
 {
-  "name": "domislink-empire",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "start": "turbo run start",
-    "lint": "turbo run lint",
-    "dev:hub": "cd apps/hub && npm run dev",
-    "dev:realestate": "cd apps/realestate && npm run dev",
-    "dev:tickets": "cd apps/tickets && npm run dev",
-    "dev:teachmaster": "cd apps/teachmaster && npm run dev"
-  },
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "turbo": "latest",
-    "typescript": "^5.0.0"
-  },
-  "packageManager": "npm@10.0.0"
+    "name":  "domislink-empire",
+    "private":  true,
+    "scripts":  {
+                    "dev":  "turbo run dev",
+                    "build":  "turbo run build",
+                    "start":  "turbo run start",
+                    "lint":  "turbo run lint",
+                    "dev:hub":  "cd apps/hub \u0026\u0026 npm run dev",
+                    "dev:realestate":  "cd apps/realestate \u0026\u0026 npm run dev",
+                    "dev:tickets":  "cd apps/tickets \u0026\u0026 npm run dev",
+                    "dev:teachmaster":  "cd apps/teachmaster \u0026\u0026 npm run dev"
+                },
+    "devDependencies":  {
+                            "@types/node":  "^20.0.0",
+                            "@types/react":  "^18.2.0",
+                            "@types/react-dom":  "^18.2.0",
+                            "turbo":  "latest",
+                            "typescript":  "^5.0.0"
+                        },
+    "packageManager":  "npm@10.0.0"
 }
