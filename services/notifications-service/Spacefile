@@ -1,0 +1,10 @@
+v: 0
+micros:
+  - name: domislink-notifications
+    src: .
+    engine: nodejs18
+    run: npm start
+    presets:
+      env:
+        - name: NODE_ENV
+          default: production

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: domislink-payments-service
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3101
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: PAYSTACK_PUBLIC_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://domislink.com,https://*.domislink.com
+      - key: WEBHOOK_SECRET
+        sync: false
