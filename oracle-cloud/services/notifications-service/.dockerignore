@@ -1,0 +1,15 @@
+logs/
+*.log
+node_modules/
+dist/
+.env
+.env.local
+coverage/
+*.md
+!README.md
+.git/
+.gitignore
+.vscode/
+.idea/
+*.test.ts
+jest.config.js

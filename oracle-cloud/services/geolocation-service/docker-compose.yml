@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  geolocation-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: domislink-geolocation-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=3002
+      - HOST=0.0.0.0
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
+      - RATE_LIMIT_WINDOW_MS=${RATE_LIMIT_WINDOW_MS:-900000}
+      - RATE_LIMIT_MAX_REQUESTS=${RATE_LIMIT_MAX_REQUESTS:-100}
+      - CACHE_TTL=${CACHE_TTL:-3600}
+      - CACHE_CHECK_PERIOD=${CACHE_CHECK_PERIOD:-600}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - IPSTACK_API_KEY=${IPSTACK_API_KEY:-}
+      - IPAPI_API_KEY=${IPAPI_API_KEY:-}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      - SERVICE_NAME=geolocation-service
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - domislink-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3002/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.domislink.service=geolocation"
+      - "com.domislink.version=1.0.0"
+      - "com.domislink.environment=${NODE_ENV:-production}"
+
+networks:
+  domislink-network:
+    driver: bridge
+    name: domislink-network
